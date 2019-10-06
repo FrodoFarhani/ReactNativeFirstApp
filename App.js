@@ -1,99 +1,82 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow
- */
+import React, {Component} from 'react';
+import {StyleSheet, View} from 'react-native';
 
-import React from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  StatusBar,
-  TextInput,
-  Button,
-} from 'react-native';
-
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-
-export default class app extends React.Component {
+import PlaceInput from './src/components/PlaceInput/PlaceInput';
+import PlaceList from './src/components/PlaceList/PlaceList';
+import PlaceDetail from './src/components/PlaceDetail/PlaceDetail';
+//static import image
+//import PlaceImage from './src/assets/1.png';
+export default class App extends Component {
   state = {
-    placeName: '',
     places: [],
+    selectedPlace: null,
   };
-  placeNameChangeHandler = val => {
-    this.setState({
-      placeName: val,
-    });
-  };
-  pressButtonHandler = () => {
-    if (this.state.placeName.trim() === '') {
-      alert('Please fill the textbox!');
-      return;
-    }
+
+  placeAddedHandler = placeName => {
     this.setState(prevState => {
       return {
-        places: prevState.places.concat(prevState.placeName),
+        places: prevState.places.concat({
+          key: Math.random(),
+          value: placeName,
+          //Static import image
+          //image: PlaceImage,
+          image: {
+            uri:
+              'https://bigmemes.funnyjunk.com/pictures/A+beautiful+scene_30057c_7120462.jpg',
+          },
+        }),
       };
     });
   };
+  placeDeleteHandler = () => {
+    this.setState(prevState => {
+      return {
+        places: prevState.places.filter(place => {
+          return place.key !== prevState.selectedPlace.key;
+        }),
+        selectedPlace: null,
+      };
+    });
+  };
+  modalClosedHandler = () => {
+    this.setState({
+      selectedPlace: null,
+    });
+  };
+  placeSelectedHandler = key => {
+    this.setState(prevState => {
+      return {
+        selectedPlace: prevState.places.find(place => {
+          return place.key === key;
+        }),
+      };
+    });
+  };
+
   render() {
-    const placeOutput = this.state.places.map((place, i) => (
-      <Text key={i}>{place}</Text>
-    ));
     return (
-      <>
-        <View style={styles.contaiter}>
-          <View style={styles.inputContainer}>
-            <TextInput
-              value={this.state.placeName}
-              onChangeText={this.placeNameChangeHandler}
-              style={styles.placeInput}
-              placeholder="Awsome text!"
-            />
-            <Button
-              title="Add"
-              style={styles.btnInput}
-              onPress={this.pressButtonHandler}
-            />
-          </View>
-          <View>{placeOutput}</View>
-        </View>
-      </>
+      <View style={styles.container}>
+        <PlaceDetail
+          selectedPlace={this.state.selectedPlace}
+          onItemDeleted={this.placeDeleteHandler}
+          onModalClosed={this.modalClosedHandler}
+        />
+        <PlaceInput onPlaceAdded={this.placeAddedHandler} />
+        <PlaceList
+          places={this.state.places}
+          onItemSelected={this.placeSelectedHandler}
+        />
+      </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  contaiter: {
+  container: {
+    flex: 1,
+    padding: 26,
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'flex-start',
-    padding: 25,
-  },
-  inputContainer: {
-    //flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    width: '90%',
-  },
-  placeInput: {
-    width: '70%',
-    borderBottomColor: 'grey',
-    borderBottomWidth: 1,
-  },
-  btnInput: {
-    width: '30%',
   },
 });
