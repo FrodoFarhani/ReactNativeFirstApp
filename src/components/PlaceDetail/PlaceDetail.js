@@ -1,5 +1,14 @@
 import React from 'react';
-import {Modal, View, Image, Text, Button, StyleSheet} from 'react-native';
+import {
+  Modal,
+  View,
+  Image,
+  Text,
+  Button,
+  StyleSheet,
+  TouchableOpacity,
+} from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 const PlaceDetail = props => {
   let modalContent = null;
@@ -20,7 +29,13 @@ const PlaceDetail = props => {
       <View style={styles.modalContainer}>
         {modalContent}
         <View>
-          <Button title="delete" color="red" onPress={props.onItemDeleted} />
+          {/*  <Button title="delete" color="red" onPress={props.onItemDeleted} /> */}
+          {/* After we add re vector icon we use this to creat our btn */}
+          <TouchableOpacity onPress={props.onItemDeleted}>
+            <View style={styles.deleteBtn}>
+              <Icon size={30} name="ios-trash" color="red"></Icon>
+            </View>
+          </TouchableOpacity>
           <Button title="close" onPress={props.onModalClosed} />
         </View>
       </View>
@@ -39,6 +54,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     fontSize: 28,
+  },
+  deleteBtn: {
+    alignItems: 'center',
   },
 });
 

@@ -16,7 +16,7 @@ import PlaceDetail from './src/components/PlaceDetail/PlaceDetail';
 class App extends Component {
   //Omitted after using redux
   /* state = {
-    places: [],
+    places: [], 
     selectedPlace: null,
   }; */
 
@@ -36,6 +36,7 @@ class App extends Component {
       };
     });*/
     this.props.onAddPlace(placeName);
+    console.log('Place added!');
   };
   placeDeleteHandler = () => {
     /* this.setState(prevState => {

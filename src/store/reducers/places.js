@@ -18,7 +18,7 @@ const reducer = (state = initialState, action) => {
         //by this, we keep our old state that we need
         ...state,
         places: state.places.concat({
-          key: Math.random(),
+          key: Math.random().toString(),
           value: action.placeName,
           image: {
             uri:
